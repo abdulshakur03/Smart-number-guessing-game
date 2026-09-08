@@ -2,12 +2,18 @@ from utils import input_validator, calculate_score, feedback, generate_secret_nu
 
 
 def main():
+
     while True:
         play_game()
         restart = play_again()
+        leader_board(score, restart)
         if restart == "n":
             print("Thanks for playing!")
             break
+
+
+score = 0
+players_score = []
 
 
 def play_game():
@@ -16,6 +22,7 @@ def play_game():
     print()
     used_attempts = 1
     secrete_number = generate_secret_number(max_range)
+    print("secrete number: ", secrete_number)  # delete later
     total_attempt = max_attempts
     print(f"I'm thinking of a number between 1 and {max_range}.")
     print(f"You have {max_attempts} attempts.")
@@ -24,6 +31,7 @@ def play_game():
         valid_input = input_validator(used_attempts, total_attempt)
         print(feedback(secrete_number, valid_input, used_attempts))
         if secrete_number == valid_input:
+            global score
             score = calculate_score(total_attempt, used_attempts)
             print(f"Your score: {score} points")
             break
@@ -34,6 +42,21 @@ def play_game():
         max_attempts = max_attempts - 1
         used_attempts = used_attempts + 1
     print()
+
+
+def leader_board(current_score, restart):
+    # players_score = [1, 2]
+    players_score.append(current_score)
+    print("players_score1 after appending: ", players_score)  # delete later
+    if restart == "n":
+        print("players_score2: ", players_score)  # delete later
+        players_score.sort(reverse=True)
+        finial_scores = tuple(players_score)
+        print("HIGH SCORE:")
+        for player_score in finial_scores:
+            # print(player_score)
+            print(player_score)
+            # print("players_score3: ", players_score)  # delete later
 
 
 def difficulty_selector():
