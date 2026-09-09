@@ -1,4 +1,5 @@
 from utils import input_validator, calculate_score, feedback, generate_secret_number
+from datetime import datetime
 
 
 def main():
@@ -14,6 +15,9 @@ def main():
 
 score = 0
 players_score = []
+seen = []
+now = datetime.now()
+# count = 1
 
 
 def play_game():
@@ -22,7 +26,7 @@ def play_game():
     print()
     used_attempts = 1
     secrete_number = generate_secret_number(max_range)
-    print("secrete number: ", secrete_number)  # delete later
+    print("secrete_number:", secrete_number)
     total_attempt = max_attempts
     print(f"I'm thinking of a number between 1 and {max_range}.")
     print(f"You have {max_attempts} attempts.")
@@ -45,29 +49,28 @@ def play_game():
 
 
 def leader_board(current_score, restart):
-    # players_score = [1, 2]
+    count = 1
     players_score.append(current_score)
-    print("players_score1 after appending: ", players_score)  # delete later
     if restart == "n":
-        print("players_score2: ", players_score)  # delete later
         players_score.sort(reverse=True)
         with open("leader_board.csv", "a") as f:
-            f.write("=======HIGH SCORE=======\n")
-        print("HIGH SCORE:")  # delete later
-        set_score = set(players_score)  # continue heere
-        for player_score in set_score:
-            # print(player_score)
-            with open("leader_board.csv", "a") as f:
-                f.write(f"{player_score}\n")
-            print(player_score)  # delete later
-            # print("players_score3: ", players_score)  # delete later
+            f.write("\n=======HIGH SCORE=======\n")
+        for player_score in players_score:
+            if player_score not in seen:
+                with open("leader_board.csv", "a") as f:
+                    f.write(f"{count}) {player_score}\n")
+                    seen.append(player_score)
+                    count += 1
+        with open("leader_board.csv", "a") as f:
+            text = f"\n{now.strftime("%Y-%m-%d (%I:%M %p)")}\n"
+            f.write(text)
 
 
 def difficulty_selector():
     while True:
         try:
             selected_level = int(
-                input("Select difficulty:\n[1] Easy\n[2] Medium\n[3] Hard\n")
+                input("Select difficulty:\n[1] Easy\n[2] Medium\n[3] Hard\n\n")
             )
 
             match selected_level:
