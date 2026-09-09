@@ -51,11 +51,15 @@ def leader_board(current_score, restart):
     if restart == "n":
         print("players_score2: ", players_score)  # delete later
         players_score.sort(reverse=True)
-        finial_scores = tuple(players_score)
-        print("HIGH SCORE:")
-        for player_score in finial_scores:
+        with open("leader_board.csv", "a") as f:
+            f.write("=======HIGH SCORE=======\n")
+        print("HIGH SCORE:")  # delete later
+        set_score = set(players_score)  # continue heere
+        for player_score in set_score:
             # print(player_score)
-            print(player_score)
+            with open("leader_board.csv", "a") as f:
+                f.write(f"{player_score}\n")
+            print(player_score)  # delete later
             # print("players_score3: ", players_score)  # delete later
 
 
