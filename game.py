@@ -5,9 +5,9 @@ from datetime import datetime
 def main():
 
     while True:
-        play_game()
+        game_score = play_game()
         restart = play_again()
-        leader_board(score, restart)
+        leader_board(game_score, restart)
         if restart == "n":
             print("Thanks for playing!")
             break
@@ -16,8 +16,6 @@ def main():
 score = 0
 players_score = []
 seen = []
-now = datetime.now()
-# count = 1
 
 
 def play_game():
@@ -35,17 +33,19 @@ def play_game():
         valid_input = input_validator(used_attempts, total_attempt)
         print(feedback(secrete_number, valid_input, used_attempts))
         if secrete_number == valid_input:
-            global score
+            # global score
             score = calculate_score(total_attempt, used_attempts)
             print(f"Your score: {score} points")
             break
         elif secrete_number != valid_input and max_attempts == 1:
+            score = 0
             print(f"You Lose\nThe secrete number is: {secrete_number}")
-            print("Your score: 0 points")
+            print(f"Your score: {score} points")
             break
         max_attempts = max_attempts - 1
         used_attempts = used_attempts + 1
     print()
+    return score
 
 
 def leader_board(current_score, restart):
@@ -53,17 +53,18 @@ def leader_board(current_score, restart):
     players_score.append(current_score)
     if restart == "n":
         players_score.sort(reverse=True)
-        with open("leader_board.csv", "a") as f:
+        with open("leader_board.txt", "a") as f:
             f.write("\n=======HIGH SCORE=======\n")
-        for player_score in players_score:
-            if player_score not in seen:
-                with open("leader_board.csv", "a") as f:
+            print("=======HIGH SCORE=======")
+            for player_score in players_score:
+                if player_score not in seen:
                     f.write(f"{count}) {player_score}\n")
+                    print(f"{count}) {player_score}\n")
                     seen.append(player_score)
                     count += 1
-        with open("leader_board.csv", "a") as f:
-            text = f"\n{now.strftime("%Y-%m-%d (%I:%M %p)")}\n"
-            f.write(text)
+            current_time = datetime.now().strftime("%Y-%m-%d (%I:%M %p)")
+            f.write(current_time)
+            print(current_time)
 
 
 def difficulty_selector():
